@@ -33,3 +33,14 @@ func CreateUser(db *gorm.DB, user models.SignUp) (models.SignUp, error) {
 	}
 	return user, nil
 }
+
+//Get All Users
+
+func GetAllUsers(db *gorm.DB, users []models.UserResponse) ([]models.UserResponse, error) {
+
+	if err := db.Model(models.SignUp{}).Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
+
+}

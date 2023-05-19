@@ -42,7 +42,8 @@ func NewRouter() *gin.Engine {
 
 	user := v1.Group("/register")
 	{
-		user.POST("", s.Register)
+		user.POST("", s.RegisterUser)
+		user.GET("", s.GetAllRegisterUsers)
 	}
 
 	return router

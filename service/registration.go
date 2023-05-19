@@ -3,7 +3,6 @@ package service
 import (
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/MuhammadSheraz535/golang-authentication/controller"
 	"github.com/MuhammadSheraz535/golang-authentication/database"
@@ -27,7 +26,7 @@ func NewSignupService() *SignupService {
 }
 
 // user Signup
-func (s *SignupService) Register(c *gin.Context) {
+func (s *SignupService) RegisterUser(c *gin.Context) {
 
 	// binding user
 	var user *models.SignUp
@@ -66,23 +65,35 @@ func (s *SignupService) Register(c *gin.Context) {
 		c.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	time := time.Now()
+
 	newUser := models.SignUp{
-		CommonModel: models.CommonModel{
-			CreatedAt: time,
-			UpdatedAt: time,
-		},
-		Name:            user.Name,
-		Email:           strings.ToLower(user.Email),
-		DOB:             user.DOB,
-		Password:        hashedPassword,
-		PasswordConfirm: `json:"-"`,
+
+		Name:     user.Name,
+		Email:    strings.ToLower(user.Email),
+		DOB:      user.DOB,
+		Password: hashedPassword,
 	}
-	newUser, err = controller.CreateUser(s.Db, newUser)
+	_, err = controller.CreateUser(s.Db, newUser)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, newUser)
+	c.JSON(http.StatusCreated, gin.H{"status": "success"})
+}
+
+//Get all register users
+
+func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
+	var users []models.UserResponse
+
+	user, err := controller.GetAllUsers(s.Db, users)
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+
 }
