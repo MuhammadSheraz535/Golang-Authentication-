@@ -44,6 +44,7 @@ func NewRouter() *gin.Engine {
 	{
 		user.POST("", s.RegisterUser)
 		user.GET("", s.GetAllRegisterUsers)
+		user.GET("/:id", s.GetUsersById)
 		user.DELETE("/:id", s.DeleteRegisterUser)
 	}
 

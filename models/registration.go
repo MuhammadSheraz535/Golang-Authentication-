@@ -13,7 +13,7 @@ type SignUp struct {
 	UpdatedAt       time.Time      `json:"-"`
 	DeletedAt       gorm.DeletedAt `gorm:"index" json:"-"`
 	Name            string         `json:"name" validate:"required,min=3"`
-	Email           string         `json:"email" validate:"required,email" gorm:"unique"`
+	Email           string         `json:"email" validate:"required,email"`
 	DOB             string         `json:"date_of_birth" validate:"required"`
 	Password        string         `json:"Password" validate:"required,min=8"`
 	PasswordConfirm string         `json:"confirm_password" validate:"required,min=8"`

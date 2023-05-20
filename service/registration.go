@@ -101,16 +101,15 @@ func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
 
 }
 
-// Delete User
-func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
+// GET users by id
 
-	log.Info("Initializing Delete User handler function...")
-
-	var user models.SignUp
+func (s *SignupService) GetUsersById(c *gin.Context) {
+	log.Info("Initializing Get User by id handler function...")
+	var user models.UserResponse
 	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
 	user.ID = id
 	//check user exists in database
-	err := controller.CheckUserExist(s.Db, user, id)
+	users, err := controller.CheckUserExist(s.Db, user, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error("User record not found against the given id")
@@ -122,8 +121,35 @@ func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	c.JSON(http.StatusOK, users)
+
+}
+
+// Delete User
+func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
+
+	log.Info("Initializing Delete User handler function...")
+
+	var user models.UserResponse
+	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
+	user.ID = id
+	//check user exists in database
+	_, err := controller.CheckUserExist(s.Db, user, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error("User record not found against the given id")
+			c.JSON(http.StatusNotFound, gin.H{"error": "record not found"})
+			return
+		}
+
+		log.Error(err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	var users models.SignUp
+	user_id := user.ID
 	// delete user from database
-	err = controller.DeleteRegisterUser(s.Db, user)
+	err = controller.DeleteRegisterUser(s.Db, users,user_id)
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

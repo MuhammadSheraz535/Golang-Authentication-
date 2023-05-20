@@ -50,21 +50,21 @@ func GetAllUsers(db *gorm.DB, name string, users []models.UserResponse) ([]model
 
 }
 
-func CheckUserExist(db *gorm.DB, user models.SignUp, id uint64) error {
+func CheckUserExist(db *gorm.DB, user models.UserResponse, id uint64) (models.UserResponse, error) {
 	log.Info("Check user exist by ID")
 
 	err := db.Model(&models.SignUp{}).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		log.Error(err.Error())
-		return err
+		return user, err
 	}
-	return nil
+	return user, nil
 
 }
 
-func DeleteRegisterUser(db *gorm.DB, user models.SignUp) error {
+func DeleteRegisterUser(db *gorm.DB, user models.SignUp, id uint64) error {
 	log.Info("Delete User")
-	err := db.Delete(&user).Error
+	err := db.Where("id  = ? ", id).Delete(&user).Error
 	if err != nil {
 		log.Error(err.Error())
 		return err
