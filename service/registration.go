@@ -1,7 +1,9 @@
 package service
 
 import (
+	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/MuhammadSheraz535/golang-authentication/controller"
@@ -27,7 +29,7 @@ func NewSignupService() *SignupService {
 
 // user Signup
 func (s *SignupService) RegisterUser(c *gin.Context) {
-
+	log.Info("Initializing Register User handler function...")
 	// binding user
 	var user *models.SignUp
 
@@ -85,6 +87,7 @@ func (s *SignupService) RegisterUser(c *gin.Context) {
 //Get all register users
 
 func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
+	log.Info("Initializing Get All Register User handler function...")
 	var users []models.UserResponse
 	name := c.Query("name")
 	user, err := controller.GetAllUsers(s.Db, name, users)
@@ -95,5 +98,38 @@ func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+
+}
+
+// Delete User
+func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
+
+	log.Info("Initializing Delete User handler function...")
+
+	var user models.SignUp
+	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
+	user.ID = id
+	//check user exists in database
+	err := controller.CheckUserExist(s.Db, user, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Error("User record not found against the given id")
+			c.JSON(http.StatusNotFound, gin.H{"error": "record not found"})
+			return
+		}
+
+		log.Error(err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	// delete user from database
+	err = controller.DeleteRegisterUser(s.Db, user)
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 
 }
