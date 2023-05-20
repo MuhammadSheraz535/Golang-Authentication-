@@ -86,8 +86,8 @@ func (s *SignupService) RegisterUser(c *gin.Context) {
 
 func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
 	var users []models.UserResponse
-
-	user, err := controller.GetAllUsers(s.Db, users)
+	name := c.Query("name")
+	user, err := controller.GetAllUsers(s.Db, name, users)
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
