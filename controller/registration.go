@@ -19,10 +19,6 @@ func HashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-func VerifyPassword(hashedPassword string, candidatePassword string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(candidatePassword))
-}
-
 // create user
 func CreateUser(db *gorm.DB, user models.SignUp) (models.SignUp, error) {
 	//check email exist

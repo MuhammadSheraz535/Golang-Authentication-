@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/MuhammadSheraz535/golang-authentication/middleware"
 	"github.com/MuhammadSheraz535/golang-authentication/service"
 	"github.com/gin-gonic/gin"
 
@@ -46,6 +47,16 @@ func NewRouter() *gin.Engine {
 		user.GET("", s.GetAllRegisterUsers)
 		user.GET("/:id", s.GetUsersById)
 		user.DELETE("/:id", s.DeleteRegisterUser)
+	}
+	user = v1.Group("/login")
+
+	{
+		user.POST("", s.Login)
+	}
+	user = v1.Group("/validate")
+
+	{
+		user.GET("", middleware.RequireAuth, s.Validate)
 	}
 
 	return router
