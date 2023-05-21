@@ -25,6 +25,7 @@ func VerifyPassword(hashedPassword string, candidatePassword string) error {
 
 // create user
 func CreateUser(db *gorm.DB, user models.SignUp) (models.SignUp, error) {
+	//check email exist
 	if db.Model(models.SignUp{}).Where("email = ?", user.Email).Find(&user).RowsAffected > 0 {
 		return user, errors.New("email is already registered")
 	}
@@ -50,7 +51,7 @@ func GetAllUsers(db *gorm.DB, name string, users []models.UserResponse) ([]model
 
 }
 
-func CheckUserExist(db *gorm.DB, user models.UserResponse, id uint64) (models.UserResponse, error) {
+func GetUserById(db *gorm.DB, user models.UserResponse, id uint64) (models.UserResponse, error) {
 	log.Info("Check user exist by ID")
 
 	err := db.Model(&models.SignUp{}).Where("id = ?", id).First(&user).Error

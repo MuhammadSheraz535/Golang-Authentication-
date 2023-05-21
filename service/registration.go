@@ -109,7 +109,7 @@ func (s *SignupService) GetUsersById(c *gin.Context) {
 	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
 	user.ID = id
 	//check user exists in database
-	users, err := controller.CheckUserExist(s.Db, user, id)
+	users, err := controller.GetUserById(s.Db, user, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error("User record not found against the given id")
@@ -134,7 +134,7 @@ func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
 	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
 	user.ID = id
 	//check user exists in database
-	_, err := controller.CheckUserExist(s.Db, user, id)
+	_, err := controller.GetUserById(s.Db, user, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Error("User record not found against the given id")
@@ -149,7 +149,7 @@ func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
 	var users models.SignUp
 	user_id := user.ID
 	// delete user from database
-	err = controller.DeleteRegisterUser(s.Db, users,user_id)
+	err = controller.DeleteRegisterUser(s.Db, users, user_id)
 	if err != nil {
 		log.Error(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

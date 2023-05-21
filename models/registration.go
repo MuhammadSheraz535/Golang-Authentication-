@@ -18,13 +18,7 @@ type SignUp struct {
 	Password        string         `json:"Password" validate:"required,min=8"`
 	PasswordConfirm string         `json:"confirm_password" validate:"required,min=8"`
 }
-type UserResponse struct {
-	ID       uint64 `json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	DOB      string `json:"date_of_birth"`
-	Password string `json:"Password"`
-}
+
 
 func (a *SignUp) Validate() error {
 	validate := validator.New()
