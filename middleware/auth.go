@@ -47,7 +47,6 @@ func RequireAuth(c *gin.Context) {
 			return
 
 		}
-		fmt.Println(claims["sub"])
 
 		if user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
