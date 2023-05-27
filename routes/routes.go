@@ -53,6 +53,11 @@ func NewRouter() *gin.Engine {
 	{
 		user.POST("", s.Login)
 	}
+	user = v1.Group("/logout")
+
+	{
+		user.GET("", s.Logout)
+	}
 	user = v1.Group("/validate")
 
 	{

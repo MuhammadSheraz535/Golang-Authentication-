@@ -3,6 +3,7 @@ package service
 import (
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/MuhammadSheraz535/golang-authentication/controller"
@@ -46,7 +47,7 @@ func (s *SignupService) Login(c *gin.Context) {
 
 	//check user by email
 	var user *models.SignUp
-	if s.Db.Model(models.SignUp{}).Where("email = ?", loginuser.Email).Find(&user).RowsAffected == 0 {
+	if s.Db.Model(models.SignUp{}).Where("email = ?", strings.ToLower(loginuser.Email)).Find(&user).RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email or password"})
 		return
 	}
