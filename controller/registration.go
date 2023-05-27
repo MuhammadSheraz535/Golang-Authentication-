@@ -34,7 +34,7 @@ func CreateUser(db *gorm.DB, user models.SignUp) (models.SignUp, error) {
 
 //Get All Users
 
-func GetAllUsers(db *gorm.DB, name string, users []models.UserResponse) ([]models.UserResponse, error) {
+func GetAllUsers(db *gorm.DB, name string, users []models.SignUp) ([]models.SignUp, error) {
 	log.Info("Get all register users")
 	db = db.Model(models.SignUp{})
 	if name != "" {
@@ -47,7 +47,7 @@ func GetAllUsers(db *gorm.DB, name string, users []models.UserResponse) ([]model
 
 }
 
-func GetUserById(db *gorm.DB, user models.UserResponse, id uint64) (models.UserResponse, error) {
+func GetUserById(db *gorm.DB, user models.SignUp, id uint64) (models.SignUp, error) {
 	log.Info("Check user exist by ID")
 
 	err := db.Model(&models.SignUp{}).Where("id = ?", id).First(&user).Error

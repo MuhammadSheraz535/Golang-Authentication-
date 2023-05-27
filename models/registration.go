@@ -10,7 +10,7 @@ type SignUp struct {
 	Email           string `json:"email" validate:"required,email"`
 	DOB             string `json:"date_of_birth" validate:"required"`
 	Password        string `json:"Password" validate:"required,min=8"`
-	PasswordConfirm string `json:"confirm_password" validate:"required,min=8"`
+	PasswordConfirm string `json:"confirm_password,omitempty" validate:"required,min=8"`
 }
 
 func (a *SignUp) Validate() error {

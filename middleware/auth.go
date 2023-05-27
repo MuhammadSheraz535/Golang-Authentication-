@@ -40,7 +40,7 @@ func RequireAuth(c *gin.Context) {
 		}
 
 		//find the user with token sub
-		var user models.UserResponse
+		var user models.SignUp
 		err := database.DB.Model(models.SignUp{}).First(&user, claims["sub"]).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})

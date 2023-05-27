@@ -88,7 +88,7 @@ func (s *SignupService) RegisterUser(c *gin.Context) {
 
 func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
 	log.Info("Initializing Get All Register User handler function...")
-	var users []models.UserResponse
+	var users []models.SignUp
 	name := c.Query("name")
 	user, err := controller.GetAllUsers(s.Db, name, users)
 	if err != nil {
@@ -105,7 +105,7 @@ func (s *SignupService) GetAllRegisterUsers(c *gin.Context) {
 
 func (s *SignupService) GetUsersById(c *gin.Context) {
 	log.Info("Initializing Get User by id handler function...")
-	var user models.UserResponse
+	var user models.SignUp
 	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
 	user.ID = id
 	//check user exists in database
@@ -130,7 +130,7 @@ func (s *SignupService) DeleteRegisterUser(c *gin.Context) {
 
 	log.Info("Initializing Delete User handler function...")
 
-	var user models.UserResponse
+	var user models.SignUp
 	id, _ := strconv.ParseUint(c.Param("id"), 0, 64)
 	user.ID = id
 	//check user exists in database
