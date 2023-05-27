@@ -9,7 +9,7 @@ import (
 
 func (s *SignupService) Logout(c *gin.Context) {
 	log.Info("Initializing Logout User handler function...")
-	c.SetCookie("Authorization", "", -3600*24*1, "", "", false, true)
+	c.SetCookie("Authorization", "", -3600*2, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 
 }
