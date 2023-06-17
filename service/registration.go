@@ -34,6 +34,7 @@ func (s *SignupService) RegisterUser(c *gin.Context) {
 	var user *models.SignUp
 
 	if err := c.ShouldBindJSON(&user); err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -58,12 +59,14 @@ func (s *SignupService) RegisterUser(c *gin.Context) {
 	//check password and confirm password are same
 
 	if user.Password != user.PasswordConfirm {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Passwords do not match"})
 		return
 
 	}
 	hashedPassword, err := controller.HashPassword(user.Password)
 	if err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
@@ -77,6 +80,7 @@ func (s *SignupService) RegisterUser(c *gin.Context) {
 	}
 	_, err = controller.CreateUser(s.Db, newUser)
 	if err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

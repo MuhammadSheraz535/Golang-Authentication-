@@ -22,8 +22,8 @@ func (s *SignupService) Login(c *gin.Context) {
 
 	// binding user
 	var loginuser *models.Login
-
 	if err := c.ShouldBindJSON(&loginuser); err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -52,17 +52,13 @@ func (s *SignupService) Login(c *gin.Context) {
 		return
 	}
 	// compare user password  with requested user password
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginuser.Password))
-
-	if err != nil {
-
+	if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginuser.Password)); err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid email or password"})
 		return
-
 	}
 
 	//Generate a jwt token
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.ID,
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
@@ -70,8 +66,8 @@ func (s *SignupService) Login(c *gin.Context) {
 
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
-
 	if err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create token"})
 		return
 	}
