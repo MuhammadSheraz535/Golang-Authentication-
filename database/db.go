@@ -22,7 +22,7 @@ func Connect() {
 	dbPort := os.Getenv("DB_PORT")
 
 	// Create connection string using environment variables
-	dsn := fmt.Sprintf("host=%s user=%s password=%s port=%s database=postgres sslmode=disable", dbHost, dbUser, dbPassword, dbPort)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s port=%s database=%s sslmode=disable", dbHost, dbUser, dbPassword, dbPort,dbName)
 
 	// Open database connection
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})

@@ -8,6 +8,7 @@ import (
 	"github.com/MuhammadSheraz535/golang-authentication/database"
 	"github.com/MuhammadSheraz535/golang-authentication/logger"
 	"github.com/MuhammadSheraz535/golang-authentication/routes"
+	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
@@ -36,6 +37,8 @@ func main() {
 
 	// Register all the routes
 	server := routes.NewRouter()
+	gin.SetMode(gin.ReleaseMode)
+
 
 	port := os.Getenv("PORT")
 	if port == "" {
