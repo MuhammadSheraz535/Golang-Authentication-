@@ -11,6 +11,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   api:
     build:
@@ -24,3 +26,6 @@ services:
     environment:
       - DB_HOST=postgres
     command: ["/app/main"]
+
+volumes:
+  postgres_data:
